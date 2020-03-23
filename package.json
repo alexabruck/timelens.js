@@ -15,12 +15,16 @@
   "bugs": "https://github.com/timelens/timelens.js/issues",
   "license": "GPL-2.0-or-later",
   "author": "Sebastian Morr <sebastian@morr.cc>",
-  "main": "timelens.js",
+  "main": "lib/timelens.js",
   "repository": "https://github.com/timelens/timelens.js",
   "scripts": {
+    "build": "rimraf lib && babel src --out-dir lib",
     "lint": "eslint . --fix"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
     "eslint": "^6.8.0"
   }
 }
