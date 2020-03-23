@@ -193,9 +193,8 @@ function pad(num, size) {
   return ("000000000" + num).substr(-size);
 }
 
-/* MediaElement.js */
-
-if (typeof MediaElementPlayer !== "undefined") {
+function extendMediaElement() {
+  if (typeof MediaElementPlayer === "undefined") return;
   Object.assign(MediaElementPlayer.prototype, {
     buildtimelens(player, controls, layers, media) {
       const t = this;
@@ -230,10 +229,9 @@ if (typeof MediaElementPlayer !== "undefined") {
   });
 }
 
-/* Clappr */
-
-if (typeof Clappr !== "undefined") {
-  class Timelens extends Clappr.UICorePlugin {
+function createClapprPlugin() {
+  if (typeof Clappr === "undefined") return;
+  class Plugin extends Clappr.UICorePlugin {
     get name() {
       return "timelens";
     }
@@ -265,6 +263,11 @@ if (typeof Clappr !== "undefined") {
       });
     }
   }
-
-  window.Timelens = Timelens;
+  return Plugin;
 }
+
+module.exports = {
+  timelens,
+  createClapprPlugin,
+  extendMediaElement
+};
