@@ -2,13 +2,13 @@
 
 function timelens(container, options) {
   // Load VTT file asynchronously, then continue with the initialization.
-  let vtt_url;
+  let vttUrl;
   if (options.thumbnails) {
-    vtt_url = options.thumbnails;
+    vttUrl = options.thumbnails;
   }
 
   const request = new XMLHttpRequest();
-  request.open("GET", vtt_url, true);
+  request.open("GET", vttUrl, true);
   request.send(null);
   request.onreadystatechange = function() {
     if (request.readyState === 4 && request.status === 200) {
@@ -79,30 +79,30 @@ function timelens2(container, vtt, options) {
     const seconds = progress * duration;
     const x = progress * timeline.offsetWidth;
 
-    const thumbnail_dir = options.thumbnails.substring(
+    const thumbnailDir = options.thumbnails.substring(
       0,
       options.thumbnails.lastIndexOf("/") + 1
     );
 
     // Find the first entry in `thumbnails` which contains the current position.
-    let active_thumbnail = null;
+    let activeThumbnail = null;
     for (let t of thumbnails) {
       if (seconds >= t.from && seconds <= t.to) {
-        active_thumbnail = t;
+        activeThumbnail = t;
         break;
       }
     }
 
     // Set respective background image.
     thumbnail.style["background-image"] =
-      "url(" + thumbnail_dir + active_thumbnail.file + ")";
+      "url(" + thumbnailDir + activeThumbnail.file + ")";
     // Move background to the correct location.
     thumbnail.style["background-position"] =
-      -active_thumbnail.x + "px " + -active_thumbnail.y + "px";
+      -activeThumbnail.x + "px " + -activeThumbnail.y + "px";
 
     // Set thumbnail div to correct size.
-    thumbnail.style.width = active_thumbnail.w + "px";
-    thumbnail.style.height = active_thumbnail.h + "px";
+    thumbnail.style.width = activeThumbnail.w + "px";
+    thumbnail.style.height = activeThumbnail.h + "px";
 
     // Move thumbnail div to the correct position.
     thumbnail.style.marginLeft =
@@ -111,7 +111,7 @@ function timelens2(container, vtt, options) {
         timeline.offsetWidth - thumbnail.offsetWidth
       ) + "px";
 
-    time.innerHTML = to_timestamp(seconds);
+    time.innerHTML = toTimestamp(seconds);
   };
 
   if (options.position) {
@@ -123,23 +123,23 @@ function timelens2(container, vtt, options) {
 }
 
 // Convert a WebVTT timestamp (which has the format [HH:]MM:SS.mmm) to seconds.
-function from_timestamp(timestamp) {
+function fromTimestamp(timestamp) {
   const matches = timestamp.match(/(.*):(.*)\.(.*)/);
 
   const minutes = parseInt(matches[1]);
   const seconds = parseInt(matches[2]);
   const mseconds = parseInt(matches[3]);
 
-  const seconds_total = mseconds / 1000 + seconds + 60 * minutes;
+  const secondsTotal = mseconds / 1000 + seconds + 60 * minutes;
 
-  return seconds_total;
+  return secondsTotal;
 }
 
 // Convert a position in seconds to a [H:]MM:SS timestamp.
-function to_timestamp(seconds_total) {
-  const hours = Math.floor(seconds_total / 60 / 60);
-  const minutes = Math.floor(seconds_total / 60 - hours * 60);
-  const seconds = Math.floor(seconds_total - 60 * minutes - hours * 60 * 60);
+function toTimestamp(secondsTotal) {
+  const hours = Math.floor(secondsTotal / 60 / 60);
+  const minutes = Math.floor(secondsTotal / 60 - hours * 60);
+  const seconds = Math.floor(secondsTotal - 60 * minutes - hours * 60 * 60);
 
   const timestamp = minutes + ":" + pad(seconds, 2);
 
@@ -168,8 +168,8 @@ function parseVTT(vtt) {
       // Parse a "cue timings" part.
       const matches = line.match(/(.*) --> (.*)/);
 
-      from = from_timestamp(matches[1]);
-      to = from_timestamp(matches[2]);
+      from = fromTimestamp(matches[1]);
+      to = fromTimestamp(matches[2]);
     } else if (/jpg/.test(line)) {
       // Parse a "cue payload" part.
       const matches = line.match(/(.*)\?xywh=(.*),(.*),(.*),(.*)/);
