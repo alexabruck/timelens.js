@@ -4,13 +4,6 @@ env:
 extends: 'eslint:recommended'
 parserOptions:
   ecmaVersion: 2018
-rules:
-  indent:
-    - error
-    - 4
-  linebreak-style:
-    - error
-    - unix
-  semi:
-    - error
-    - always
+globals:
+  Clappr: true
+  MediaElementPlayer: true
